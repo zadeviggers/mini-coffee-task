@@ -22,7 +22,7 @@ order = []
 total_price = 0
 
 print("Welcome to the Coffee shop!")
-print("Pleas place your order.")
+print("Please place your order.")
 
 
 ordering = True
@@ -79,7 +79,11 @@ while ordering:
         vaild_coffe_type_input = True
     wants_another_coffee = input(
         "Do you want to add another coffee to the order? (yes/no): ").strip().lower()
-    if not (wants_another_coffee == "yes" or wants_another_coffee == "y"):
+    if len(wants_another_coffee) == 0 or wants_another_coffee not in ["y", "yes", "n", "no"]:
+        print("Valid option not selected. Defaulting to no.")
+        ordering = False
+        continue  # Continue looping, but end this iteration of the loop
+    elif wants_another_coffee != "yes" or wants_another_coffee != "y":
         ordering = False
         continue  # Continue looping, but end this iteration of the loop
 
