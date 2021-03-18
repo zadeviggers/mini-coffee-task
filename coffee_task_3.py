@@ -91,7 +91,7 @@ while ordering:
         ordering = False
         continue  # Continue looping, but end this iteration of the loop
     # If it's yes, then stop looping
-    elif wants_another_coffee != "yes" or wants_another_coffee != "y":
+    elif wants_another_coffee not in ["y", "yes"]:
         ordering = False
         continue  # Continue looping, but end this iteration of the loop
 
