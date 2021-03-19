@@ -30,7 +30,7 @@ ordering = True  # Used to keep track of if the user is placing an order
 # Loop that collects and order from people then asks if they want another one and if they do it keeps going and if they don't the loop exits
 while ordering:
     vaild_coffe_type_input = False
-    # Loop that runs until the user provides a valid inpuyt
+    # Loop that runs until the user provides a valid input
     while not vaild_coffe_type_input:
         print()  # New line
         # Print out a list of all the avalible coffees by looping therough both the price and item menus at the same time using the zip() method
@@ -82,23 +82,27 @@ while ordering:
             ammount_of_coffee_vaild = True
 
         vaild_coffe_type_input = True
+
+    # Add a random coffee to the order
+    random_coffee = random.choice(coffee_menu)
+    order.append([random_coffee, 1])
+
     # Check if the user wants to ad another coffee to the order
     wants_another_coffee = input(
         "Do you want to add another coffee to the order? (yes/no): ").strip().lower()  # Get input from user
+        
     # Default to no if thgey don't provide a valid option
     if len(wants_another_coffee) == 0 or wants_another_coffee not in ["y", "yes", "n", "no"]:
         print("Valid option not selected. Defaulting to no.")
         ordering = False
         continue  # Continue looping, but end this iteration of the loop
+
     # If it's yes, then stop looping
-    elif wants_another_coffee not in ["y", "yes"]:
+    if wants_another_coffee != "yes" and wants_another_coffee != "y":
         ordering = False
         continue  # Continue looping, but end this iteration of the loop
 
-# Add a random coffee to the order
-random_coffee = random.choice(coffee_menu)
-order.append(
-    [random_coffee, 1])
+
 
 # Prinit the final order
 print("\nHere is your final order:\n")
