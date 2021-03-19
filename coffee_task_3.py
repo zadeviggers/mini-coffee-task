@@ -6,7 +6,7 @@
 import random
 
 # Constants
-MAX_COFFEE_COUNT = 3  # The maximum number of coffees that can be ordered
+MAX_COFFEE_COUNT = 10  # The maximum number of coffees that can be ordered
 # The default amount of coffees ordered if the user does not select an amount
 DEFAULT_COFFEE_AMOUNT = 1
 
@@ -35,7 +35,7 @@ while ordering:
         print()  # New line
         # Print out a list of all the avalible coffees by looping therough both the price and item menus at the same time using the zip() method
         for coffee, price in zip(coffee_menu, coffee_price_menu):
-            print(" - {} (${})".format(coffee.title(), price))
+            print(" - {} (${:.2f})".format(coffee.title(), price))
         print()  # New line
 
         coffee_type_input = input(
@@ -44,67 +44,61 @@ while ordering:
         # Make sure that it's a valid coffee type
         if coffee_type_input not in coffee_menu:
             print("Please select a valid coffee type!")
-            continue  # Continue looping, but end this iteration of the loop
+        else:
 
-        # Loop until the user provides a valid ammount of coffee, OR they provide no input, in which case it defaults to 1
-        ammount_of_coffee_vaild = False
-        while not ammount_of_coffee_vaild:
-            ammount_of_coffee = input(
-                "How many {}s do you want? ".format(coffee_type_input.title())).strip().lower()
+            # Loop until the user provides a valid ammount of coffee, OR they provide no input, in which case it defaults to 1
+            ammount_of_coffee_vaild = False
+            while not ammount_of_coffee_vaild:
+                ammount_of_coffee = input(
+                    "How many {}s do you want? ".format(coffee_type_input.title())).strip().lower()
 
-            # Default to 1 coffee if the user inputs nothing
-            if len(ammount_of_coffee) == 0:
-                ammount_of_coffee = 1
-                print("Amount not provided. Defaulting to 1.")
-            else:
-                # Make sure the input is a valid number
-                try:
-                    ammount_of_coffee = int(ammount_of_coffee)
-                except ValueError:
-                    print("Please select a valid number of coffees!")
-                    continue  # Continue looping, but end this iteration of the loop
+                # Default to 1 coffee if the user inputs nothing
+                if len(ammount_of_coffee) == 0:
+                    ammount_of_coffee = 1
+                    print("Amount not provided. Defaulting to 1.")
+                else:
+                    # Make sure the input is a valid number
+                    try:
+                        ammount_of_coffee = int(ammount_of_coffee)
+                        # Make sure the user inputs a number greater than 0
+                        if ammount_of_coffee < 1:
+                            print("You can't order less than 1 coffee!")
+                        else:
+                            # Make sure that the user doesn't input more than the maximunm for that coffee type
+                            maximun_ammount_of_this_coffee = maximum_ammount_of_coffees_menu[coffee_menu.index(
+                                coffee_type_input)]
+                            if ammount_of_coffee > maximun_ammount_of_this_coffee:
+                                print("You can't order more than {} {}s!".format(
+                                    maximun_ammount_of_this_coffee, coffee_type_input))
+                            else:
 
-            # Make sure the user inputs a number greater than 0
-            if ammount_of_coffee < 1:
-                print("You can't order less than 1 coffee!")
-                continue  # Continue looping, but end this iteration of the loop
+                                # Add the coffee to the order
+                                order.append([coffee_type_input, ammount_of_coffee])
+                                ammount_of_coffee_vaild = True
+                    except ValueError:
+                        print("Please select a valid number of coffees!")
+                        continue  # Continue looping, but end this iteration of the loop
+            vaild_coffe_type_input = True
 
-            # Make sure that the user doesn't input more than the maximunm for that coffee type
-            maximun_ammount_of_this_coffee = maximum_ammount_of_coffees_menu[coffee_menu.index(
-                coffee_type_input)]
-            if ammount_of_coffee > maximun_ammount_of_this_coffee:
-                print("You can't ordxer more than {} {}s!".format(
-                    maximun_ammount_of_this_coffee, coffee_type_input))
-                continue  # Continue looping, but end this iteration of the loop
+        # Add a random coffee to the order
+        random_coffee = random.choice(coffee_menu)
+        order.append([random_coffee, 1])
 
-            # Add the coffee to the order
-            order.append([coffee_type_input, ammount_of_coffee])
-            ammount_of_coffee_vaild = True
+        # Check if the user wants to ad another coffee to the order
+        wants_another_coffee = input(
+            "Do you want to add another coffee to the order? (yes/no): ").strip().lower()  # Get input from user
 
-        vaild_coffe_type_input = True
-
-    # Add a random coffee to the order
-    random_coffee = random.choice(coffee_menu)
-    order.append([random_coffee, 1])
-
-    # Check if the user wants to ad another coffee to the order
-    wants_another_coffee = input(
-        "Do you want to add another coffee to the order? (yes/no): ").strip().lower()  # Get input from user
-        
-    # Default to no if thgey don't provide a valid option
-    if len(wants_another_coffee) == 0 or wants_another_coffee not in ["y", "yes", "n", "no"]:
-        print("Valid option not selected. Defaulting to no.")
-        ordering = False
-        continue  # Continue looping, but end this iteration of the loop
-
-    # If it's yes, then stop looping
-    if wants_another_coffee != "yes" and wants_another_coffee != "y":
-        ordering = False
-        continue  # Continue looping, but end this iteration of the loop
+        # Default to no if thgey don't provide a valid option
+        if len(wants_another_coffee) == 0 or wants_another_coffee not in ["y", "yes", "n", "no"]:
+            print("Valid option not selected. Defaulting to no.")
+            ordering = False
+        # If the user does not input yes(i.e. no or n), then end this iuteration of the loop
+        elif wants_another_coffee != "yes" and wants_another_coffee != "y":
+            ordering = False
 
 
 
-# Prinit the final order
+# Print the final order
 print("\nHere is your final order:\n")
 # loop through each item in the order
 for item in order:
